@@ -1,0 +1,25 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.artifacts/
+
+# Local credentials and tool settings
+.aws/
+.codex/
+.agents/
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local editor, OS and generated files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.log
+*.crx
+*.zip
+coverage/

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>인하 자비스</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="sidepanel.js" type="module"></script>
+</head>
+<body>
+  <h1 class="sr-only">인하 자비스</h1>
+  <main>
+    <div class="topbar"><nav aria-label="조회할 기능" class="features">
+      <button type="button" data-feature="seats" aria-pressed="true">정석 좌석</button>
+      <button type="button" data-feature="breakfast" aria-pressed="false">천원의 아침밥</button>
+      <button type="button" data-feature="notices" aria-pressed="false">인하공지</button>
+    </nav><button type="button" id="settings-toggle" class="settings-icon" aria-label="설정" title="설정" aria-expanded="false" aria-controls="settings">⚙</button></div>
+    <section id="feature-content" class="card" aria-labelledby="feature-title">
+      <div class="toolbar">
+        <h2 id="feature-title"></h2>
+        <div class="toolbar-actions"><span class="status" id="status" hidden></span><button id="refresh" class="icon-button" title="새로 조회" aria-label="새로 조회" disabled>↻</button></div>
+      </div>
+      <div id="notice-board-tools" hidden><label class="sr-only" for="notice-board">게시판 선택</label><select id="notice-board"></select></div>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+      <div id="notice-tools" hidden><label class="sr-only" for="notice-query">가져온 공지 제목 검색</label><input id="notice-query" type="search" placeholder="공지 제목 검색" maxlength="100"></div>
+      <div id="results" aria-live="polite"></div>
+      <button id="connect" class="primary" hidden>정보 불러오기</button>
+      <div class="result-footer"><span id="provenance"></span><a id="source-link" target="_blank" rel="noopener noreferrer">원문 ↗</a></div>
+      <div id="recovery" hidden>
+        <button id="read-tab" class="secondary" disabled>열린 페이지 읽기</button>
+        <details><summary>자세히</summary><p id="message-detail" class="help"></p></details>
+      </div>
+    </section>
+    <section id="settings" class="settings" aria-labelledby="settings-title" hidden>
+      <h2 id="settings-title">설정</h2>
+      <button id="disconnect-seats" class="text-button" hidden>정석 페이지 연결 해제</button>
+      <button id="clear-data" class="text-button" disabled>저장된 정보 삭제</button>
+      <p id="settings-message" class="message" role="status"></p>
+      <details id="advanced-settings"><summary>고급 설정</summary>
+      <label for="settings-source">설정할 정보</label>
+      <select id="settings-source"></select>
+      <form id="source-form">
+        <label for="source-url">선택한 기능의 공식 페이지 주소</label>
+        <input id="source-url" type="url" placeholder="https://…inha.ac.kr/…" required maxlength="2000">
+        <button type="submit" class="secondary" id="save-source" disabled>주소 저장</button>
+      </form>
+      <p id="auto-status" class="help"></p>
+      <p id="tab-help" class="help">페이지 읽기로 가져온 정보는 원문을 새로고침한 뒤 다시 읽어 주세요.</p>
+      </details>
+    </section>
+  </main>
+</body>
+</html>
