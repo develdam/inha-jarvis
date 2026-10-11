@@ -6,6 +6,7 @@ import { NOTICE_BOARDS, noticeKey, featureForKey, noticeDefaultUrl } from "./sou
 import { menuLines, mealDay } from "./breakfast.js";
 import { occupancyPercent } from "./seats.js";
 import { libraryOrigins } from "./seat-connection.js";
+import { upcomingExams, dDayLabel } from "./exams.js";
 
 const $ = (id) => document.getElementById(id);
 const state = { selected: "seats", settings: false, board: "general", sources: {}, results: {}, messages: {}, seatTabId: null, seatLogin: false, seatChecked: false, busy: false, ready: false };
@@ -243,6 +244,22 @@ function renderResults() {
   $("provenance").title = "한국 시간 · " + new URL(result.sourceUrl).hostname;
 }
 
+function renderExams() {
+  const exams = state.selected === "seats" ? upcomingExams() : [];
+  $("exams").hidden = !exams.length;
+  $("exam-list").replaceChildren(...exams.map((exam) => {
+    const item = node("li", undefined, "exam" + (exam.days <= 7 ? " exam-soon" : "") + (exam.gap ? " gap-" + exam.gap : ""));
+    const info = node("div");
+    info.append(node("p", exam.course + (exam.kind ? " " + exam.kind : ""), "exam-course"));
+    const [, month, day] = exam.date.split("-").map(Number);
+    const weekday = new Intl.DateTimeFormat("ko-KR", { weekday: "short", timeZone: "UTC" }).format(new Date(exam.date + "T00:00:00Z"));
+    info.append(node("p", [`${month}/${day}(${weekday})`, exam.time, exam.place].filter(Boolean).join(" · "), "exam-when"));
+    if (exam.note) info.append(node("p", exam.note, "exam-note"));
+    item.append(info, node("strong", dDayLabel(exam.days), "exam-dday"));
+    return item;
+  }));
+}
+
 function render() {
   const key = selectedKey();
   const feature = FEATURES[state.selected];
@@ -279,6 +296,7 @@ function render() {
       "자동 조회 · 저장 정보가 30분 지나면 갱신";
   $("tab-help").textContent = key === "seats" ? "필요한 정석 탭은 자동으로 열어요. 로그인이 만료되면 다시 로그인해 주세요." : "페이지 읽기로 가져온 정보는 원문을 새로고침한 뒤 다시 읽어 주세요.";
   renderResults();
+  renderExams();
 }
 
 function selectFeature(key) {
@@ -460,6 +478,7 @@ async function init() {
   state.ready = true; selectFeature("seats");
 }
 setInterval(() => {
+  if (state.selected === "seats") renderExams();
   if (state.results[selectedKey()] && (state.selected === "breakfast" || isStale(state.results[selectedKey()]))) render();
 }, 15_000);
 document.addEventListener("visibilitychange", () => {

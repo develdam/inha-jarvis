@@ -70,3 +70,14 @@ input[type="url"], input[type="search"] { width: 100%; min-width: 0; border: 1px
 #notice-board, #settings-source { width: 100%; min-width: 0; padding: 10px 8px; border: 1px solid #d3dce9; border-radius: 8px; color: #18304b; background: #fff; font: inherit; font-size: 12px; }
 #notice-board-tools { margin-bottom: 10px; }
 #notice-board:focus-visible { outline: 2px solid #2269d7; outline-offset: 3px; }
+.exams { margin-top: 22px; padding-top: 14px; border-top: 1px solid #edf0f5; }
+.exams h2 { margin: 0 0 10px; font-size: 15px; letter-spacing: -.5px; }
+.exam-list { list-style: none; padding: 0; margin: 0; border-top: 2px solid #d93025; }
+.exam { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #edf0f5; }
+.exam.gap-free { border-bottom: 2px solid #3aa757; }
+.exam.gap-tight { border-bottom: 2px solid #d93025; }
+.exam-course { margin: 0; font-size: 13px; font-weight: 700; overflow-wrap: anywhere; }
+.exam-when { margin: 4px 0 0; font-size: 11px; color: #63748a; }
+.exam-note { margin: 3px 0 0; font-size: 11px; color: #906009; }
+.exam-dday { flex: none; font-size: 13px; color: #355575; padding: 3px 8px; border-radius: 6px; background: #f0f3f8; }
+.exam-soon .exam-dday { color: #a13325; background: #fdecea; }

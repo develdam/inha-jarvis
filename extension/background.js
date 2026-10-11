@@ -2,6 +2,21 @@ import { FEATURES, officialUrl } from "./core.js";
 import { fetchOfficialPage } from "./network.js";
 import { featureForKey, isSourceKey, noticeDefaultUrl } from "./sources.js";
 import { ensureSeatTab } from "./seat-connection.js";
+import { upcomingExams, dDayLabel } from "./exams.js";
+
+// Show the nearest exam's D-day on the toolbar icon; the alarm rolls it over at midnight.
+async function updateExamBadge() {
+  const [next] = upcomingExams();
+  await chrome.action.setBadgeText({ text: next ? (next.days === 0 ? "DDAY" : dDayLabel(next.days)) : "" });
+  await chrome.action.setBadgeBackgroundColor({ color: next && next.days <= 7 ? "#c0392b" : "#155bcc" });
+  await chrome.action.setBadgeTextColor({ color: "#ffffff" });
+  await chrome.action.setTitle({ title: next ? `인하 자비스 · ${next.course} ${dDayLabel(next.days)} (${next.date.slice(5).replace("-", "/")} ${next.time || ""})`.trim() : "인하 자비스 열기" });
+}
+chrome.alarms.create("exam-badge", { periodInMinutes: 30 });
+chrome.alarms.onAlarm.addListener((alarm) => { if (alarm.name === "exam-badge") void updateExamBadge(); });
+chrome.runtime.onStartup.addListener(() => void updateExamBadge());
+chrome.runtime.onInstalled.addListener(() => void updateExamBadge());
+void updateExamBadge();
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (sender.id !== chrome.runtime.id || sender.url !== chrome.runtime.getURL("sidepanel.html") || message?.type !== "ENSURE_SEAT_TAB") return false;
